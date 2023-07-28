@@ -1,0 +1,87 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<title>Dropscotch</title>
+	</head>
+<body>
+
+<h1>Dropscotch</h1>
+<p id="currentSteps">
+</br>
+</p>
+<button id="buttonLeft" type="button" onclick="left()">1</button>
+<button id="buttonRight" type="button" onclick="right()">2</button>
+<p Possible solutions></p>
+<p id="sln"></p>
+
+
+<button type="button" onclick="reset()">Reset</button>
+
+<script>
+	const solutions = [
+						'11121221212121',
+						'11122111212221',
+						'12121122122122',
+						'12122212211122',
+						'12221212111222',
+						'21121111212121',
+						'21121112212122',
+						'21221222112122',
+						'21211212121221',
+						'22121122121211',
+						'22121122122122',
+						'22121122121222'
+						];
+	
+	let current;
+	let possibleSolutions;
+	reset();
+	
+	function reset()
+	{
+		current = "";
+		document.getElementById('currentSteps').innerHTML = '</br>';
+		updatePossibleSolutions();
+	}
+	
+	function left() {
+		current += "1";
+		document.getElementById('currentSteps').innerHTML = current;
+		updatePossibleSolutions();
+	}
+	function right() {
+		current += "2";
+		document.getElementById('currentSteps').innerHTML = current;
+		updatePossibleSolutions();
+	}
+	
+	function updatePossibleSolutions(){
+		possibleSolutions = solutions.filter(filter);
+		document.getElementById('sln').innerHTML = possibleSolutions.join('</br>');
+		analyze();
+	}
+	
+	function filter(value, index, array){
+		return value.indexOf(current) === 0;
+	}
+	
+	function lookahead1(value, index, array){
+		return value.indexOf(current+"1") === 0;
+	}
+		
+	function lookahead2(value, index, array){
+		return value.indexOf(current+"2") === 0;
+	}
+	
+	function analyze() {
+		let leftCount = possibleSolutions.filter(lookahead1).length;
+		let rightCount = possibleSolutions.filter(lookahead2).length;
+		let total = leftCount + rightCount;
+		document.getElementById('buttonLeft').innerHTML = "← "+(leftCount*100/total).toPrecision(3)+"%";
+		document.getElementById('buttonRight').innerHTML = "→ "+(rightCount*100/total).toPrecision(3)+"%";
+	}
+	
+</script>
+
+</body>
+</html> 
